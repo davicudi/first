@@ -1,0 +1,46 @@
+[gd_scene load_steps=5 format=3 uid="uid://cm1okteldqrt2"]
+
+[ext_resource type="Texture2D" uid="uid://dlpgxd70spx1c" path="res://assets/Terrain/Terrain (16x16).png" id="1_nlgqw"]
+[ext_resource type="Script" uid="uid://d04wbmrfu3fni" path="res://path_follow_2d.gd" id="2_507ja"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kek77"]
+size = Vector2(3.9017944, 47.668457)
+
+[sub_resource type="Curve2D" id="Curve2D_272bh"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 2261.8694, 400.11563, 0, 0, 0, 0, 2261.8694, 171.7687, 0, 0, 0, 0, 2388.826, 168.36053, 0, 0, 0, 0, 2495.7825, 280.82993, 0, 0, 0, 0, 2499.2607, 405.7959, 0, 0, 0, 0, 2261.8694, 400.11563)
+}
+point_count = 6
+
+[node name="Platform" type="Node"]
+
+[node name="AnimatableBody2D" type="AnimatableBody2D" parent="."]
+position = Vector2(2235.9998, 373.43063)
+rotation = -1.5707964
+scale = Vector2(0.8044295, 1.0489005)
+
+[node name="Sprite2D" type="Sprite2D" parent="AnimatableBody2D"]
+texture_filter = 1
+rotation = 1.5707964
+scale = Vector2(3, 3)
+texture = ExtResource("1_nlgqw")
+region_enabled = true
+region_rect = Rect2(271.75018, 15.299066, 48.478516, 6.335208)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatableBody2D"]
+scale = Vector2(3, 3)
+shape = SubResource("RectangleShape2D_kek77")
+
+[node name="Path2D" type="Path2D" parent="."]
+position = Vector2(-136.47598, 51.56582)
+scale = Vector2(1.0489005, 0.8044295)
+curve = SubResource("Curve2D_272bh")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
+position = Vector2(2261.8694, 400.11563)
+rotation = -1.5707964
+rotates = false
+script = ExtResource("2_507ja")
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="Path2D/PathFollow2D"]
+remote_path = NodePath("../../../AnimatableBody2D")

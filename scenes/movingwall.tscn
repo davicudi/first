@@ -1,0 +1,63 @@
+[gd_scene load_steps=6 format=3 uid="uid://cmui8y7j3v2wq"]
+
+[ext_resource type="Texture2D" uid="uid://uyypepppawg6" path="res://assets/Traps/Platforms/Brown On (32x8).png" id="1_02gim"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0sxdr"]
+size = Vector2(21, 512)
+
+[sub_resource type="Animation" id="Animation_0sxdr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_02gim"]
+resource_name = "up and down"
+length = 4.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2, 4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -300), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bfstb"]
+_data = {
+&"RESET": SubResource("Animation_0sxdr"),
+&"up and down": SubResource("Animation_02gim")
+}
+
+[node name="AnimatableBody2D" type="AnimatableBody2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+rotation = 1.5707964
+scale = Vector2(2, 3)
+texture = ExtResource("1_02gim")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1.5, 0)
+shape = SubResource("RectangleShape2D_0sxdr")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Sprite2D")
+libraries = {
+&"": SubResource("AnimationLibrary_bfstb")
+}
+autoplay = "up and down"
