@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=4 uid="uid://bo7temov2yctt"]
+[gd_scene load_steps=21 format=4 uid="uid://bo7temov2yctt"]
 
 [ext_resource type="Texture2D" uid="uid://bfcfm4exj1iop" path="res://assets/Background/Green.png" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://dlpgxd70spx1c" path="res://assets/Terrain/Terrain (16x16).png" id="2_1bvp3"]
@@ -8,7 +8,7 @@
 [ext_resource type="Script" uid="uid://cijg58tujvd3d" path="res://game_manager.gd" id="6_7mycd"]
 [ext_resource type="PackedScene" uid="uid://chdg8ye0dkubp" path="res://scenes/finish.tscn" id="7_272bh"]
 [ext_resource type="Script" uid="uid://d04wbmrfu3fni" path="res://path_follow_2d.gd" id="8_5vw27"]
-[ext_resource type="PackedScene" uid="uid://cmui8y7j3v2wq" path="res://scenes/movingwall.tscn" id="9_kek77"]
+[ext_resource type="Texture2D" uid="uid://c26os6rw6uptr" path="res://assets/Traps/Rock Head/Idle.png" id="9_kek77"]
 
 [sub_resource type="Theme" id="Theme_272bh"]
 
@@ -226,6 +226,47 @@ _data = {
 }
 point_count = 6
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4c57u"]
+size = Vector2(32, 32)
+
+[sub_resource type="Animation" id="Animation_0sxdr"]
+resource_name = "new_animation"
+length = 2.0
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(-1.5, -1.5),
+"update": 0,
+"values": [Vector2(1860, -144.42), Vector2(1860, -300)]
+}
+
+[sub_resource type="Animation" id="Animation_kek77"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1860, -160)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bfstb"]
+_data = {
+&"RESET": SubResource("Animation_kek77"),
+&"new_animation": SubResource("Animation_0sxdr")
+}
+
 [node name="Node" type="Node"]
 
 [node name="UI" type="CanvasLayer" parent="."]
@@ -301,7 +342,7 @@ position = Vector2(2842, 400)
 [node name="Platform" type="Node" parent="SceneObjects"]
 
 [node name="AnimatableBody2D" type="AnimatableBody2D" parent="SceneObjects/Platform"]
-position = Vector2(2235.9998, 373.43063)
+position = Vector2(2235.9998, 350.95868)
 rotation = -1.5707964
 scale = Vector2(0.8044295, 1.0489005)
 
@@ -323,12 +364,30 @@ scale = Vector2(1.0489005, 0.8044295)
 curve = SubResource("Curve2D_272bh")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="SceneObjects/Platform/Path2D"]
-position = Vector2(2261.8694, 400.11563)
+position = Vector2(2261.8694, 372.18036)
 rotation = -1.5707964
+progress = 27.936941
 rotates = false
 script = ExtResource("8_5vw27")
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="SceneObjects/Platform/Path2D/PathFollow2D"]
 remote_path = NodePath("../../../AnimatableBody2D")
 
-[node name="AnimatableBody2D" parent="SceneObjects" instance=ExtResource("9_kek77")]
+[node name="Obstacle" type="AnimatableBody2D" parent="SceneObjects"]
+position = Vector2(1860, -160)
+scale = Vector2(3, 3)
+
+[node name="Sprite2D" type="Sprite2D" parent="SceneObjects/Obstacle"]
+texture_filter = 1
+texture = ExtResource("9_kek77")
+region_enabled = true
+region_rect = Rect2(5.5240746, 4.7083054, 31.057919, 31.917656)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SceneObjects/Obstacle"]
+shape = SubResource("RectangleShape2D_4c57u")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="SceneObjects/Obstacle"]
+libraries = {
+&"": SubResource("AnimationLibrary_bfstb")
+}
+autoplay = "new_animation"
